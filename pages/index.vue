@@ -17,7 +17,10 @@
         </div>
       </header>
       <br />
-      <div id="emj">
+      <div v-if="loading" id="target" ref="target" class="center">
+        <div ref="content" class="content-div" />
+      </div>
+      <div v-else id="emj">
         <dl class="emojis">
           <h3>Base Emotes</h3>
           <div
@@ -142,7 +145,7 @@
 /* eslint-disable no-eval */
 import Vue from 'vue'
 import axios from 'axios'
-
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 export default Vue.extend({
   components: {
     // Logo,
@@ -156,12 +159,22 @@ export default Vue.extend({
         verified: {},
         staff: {},
       },
+      loading: false,
     }
   },
-  mounted() {
+  async mounted() {
+    this.loading = true
+    await sleep(500)
+    const loading = this.$vs.loading({
+      target: this.$refs.content,
+      type: 'rectangle',
+      background: '#18191c',
+    })
     axios
       .get('https://cors-anywhere.herokuapp.com/https://tetr.io/js/tetrio.js')
       .then((res) => {
+        loading.close()
+        this.loading = false
         const data = res.data
         let emotes: any
         const jsonString = (/[a-zA-Z]*=({base:{awesome:.+?}})/.exec(data) || [
@@ -313,5 +326,27 @@ dl.emojis dd {
 
 dl.emojis dd.success {
   color: rgb(202, 143, 4);
+}
+
+#target {
+  display: flex;
+}
+.center {
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.center .content-div {
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-size: 0.6rem;
 }
 </style>
