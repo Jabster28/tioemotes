@@ -165,6 +165,7 @@ export default Vue.extend({
   async mounted() {
     this.loading = true
     await sleep(500)
+    // @ts-ignore
     const loading = this.$vs.loading({
       target: this.$refs.content,
       type: 'rectangle',
