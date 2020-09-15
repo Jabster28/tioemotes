@@ -5,27 +5,15 @@
         <h1 class="title">TETR.IO Emote List</h1>
         <div class="links">
           <h3 class="h3">TETR.IO</h3>
-          <vs-button
-            href="https://tetr.io/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Website
-          </vs-button>
-          <vs-button
-            href="https://tetr.io/about"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            About
-          </vs-button>
-          <vs-button
-            href="https://discord.gg/ufDb2XJ"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Discord
-          </vs-button>
+          <a href="https://tetr.io/" target="_blank">
+            <vs-button rel="noopener noreferrer"> Website </vs-button>
+          </a>
+          <a href="https://tetr.io/about" target="_blank">
+            <vs-button rel="noopener noreferrer"> About </vs-button>
+          </a>
+          <a href="https://discord.gg/ufDb2XJ" target="_blank">
+            <vs-button rel="noopener noreferrer"> Discord </vs-button>
+          </a>
         </div>
       </header>
       <br />
