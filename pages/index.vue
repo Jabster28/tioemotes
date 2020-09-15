@@ -29,27 +29,58 @@
         </div>
       </header>
       <br />
-      <h3>Base Emotes</h3>
-      <vs-row :w="12" class="dark">
-        <vs-card
-          v-for="(emote, index) in Object.values(emotes.base)"
-          :key="index"
-          style="background: none"
-          type="2"
-          :w="3"
-        >
-          <template #title></template>
-          <template #img
-            ><img
-              class="emote"
-              width="100px"
-              height="100px"
-              :src="'https://tetr.io/res/' + emote"
-          /></template>
-          <template #text>:{{ Object.keys(emotes.base)[index] }}:</template>
-        </vs-card>
-      </vs-row>
-      <h3>Supporter Emotes (need Patreon tier Quad or above)</h3>
+      <div id="emj">
+        <dl class="emojis">
+          <h3>Base Emotes</h3>
+          <div
+            v-for="(emote, index) in Object.values(emotes.base)"
+            :key="index"
+            @click="copyEmojo"
+          >
+            <dt>
+              <img
+                :src="'https://tetr.io/res/' + emote"
+                :alt="`:${Object.keys(emotes.base)[index]}:`"
+              />
+            </dt>
+            <dd>:{{ Object.keys(emotes.base)[index] }}:</dd>
+          </div>
+        </dl>
+        <dl class="emojis">
+          <h3>Supporter Emotes (need Patreon tier Quad or above)</h3>
+          <div
+            v-for="(emote, index) in Object.values(emotes.supporter)"
+            :key="index"
+            @click="copyEmojo"
+          >
+            <dt>
+              <img
+                :src="'https://tetr.io/res/' + emote"
+                :alt="`:${Object.keys(emotes.supporter)[index]}:`"
+              />
+            </dt>
+            <dd>:{{ Object.keys(emotes.supporter)[index] }}:</dd>
+          </div>
+        </dl>
+        <dl class="emojis">
+          <h3>Staff Emotes</h3>
+          <div
+            v-for="(emote, index) in Object.values(emotes.staff)"
+            :key="index"
+            @click="copyEmojo"
+          >
+            <dt>
+              <img
+                :src="'https://tetr.io/res/' + emote"
+                :alt="`:${Object.keys(emotes.staff)[index]}:`"
+              />
+            </dt>
+            <dd>:{{ Object.keys(emotes.staff)[index] }}:</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- <h3>Supporter Emotes (need Patreon tier Quad or above)</h3>
       <vs-row :w="12" class="dark">
         <vs-card
           v-for="(emote, index) in Object.values(emotes.supporter)"
@@ -110,7 +141,7 @@
           /></template>
           <template #text>:{{ Object.keys(emotes.staff)[index] }}:</template>
         </vs-card>
-      </vs-row>
+      </vs-row> -->
       <br />
       <footer>
         <h4>Made haphazardly by Jabster28#6048</h4>
@@ -120,10 +151,9 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable no-eval */
 import Vue from 'vue'
 import axios from 'axios'
-import Logo from '~/components/Logo.vue'
-import VuesaxLogo from '~/components/VuesaxLogo.vue'
 
 export default Vue.extend({
   components: {
@@ -167,10 +197,41 @@ export default Vue.extend({
         this.emotes = emotes
       })
   },
+  methods: {
+    copyEmojo(self: { target: HTMLElement }) {
+      const selection = window.getSelection()
+      const range = document.createRange()
+      const dd = self.target
+
+      if (dd.classList.contains('success')) {
+        return
+      }
+
+      range.selectNodeContents(dd.childNodes[0])
+      selection?.removeAllRanges()
+      selection?.addRange(range)
+
+      document.execCommand('copy')
+      selection?.removeAllRanges()
+
+      const original = dd.textContent
+      dd.textContent = 'copied!'
+      dd.classList.add('success')
+
+      setTimeout(() => {
+        dd.textContent = original
+        dd.classList.remove('success')
+      }, 1200)
+    },
+  },
 })
 </script>
 
 <style>
+#emj {
+  display: flex;
+  align-items: baseline;
+}
 .dark .emote {
   background-color: #18191c;
   color: #fff;
@@ -233,5 +294,36 @@ export default Vue.extend({
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-weight: 400;
   margin: 10px;
+}
+
+dl.emojis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15em, max-content));
+  grid-row-gap: 5px;
+}
+
+dl.emojis div {
+  cursor: pointer;
+}
+
+dl.emojis div * {
+  display: inline-block;
+}
+
+dl.emojis dt img {
+  height: 20px;
+  width: 20px;
+  object-fit: contain;
+  vertical-align: middle;
+  padding-bottom: 2px;
+}
+
+dl.emojis dd {
+  margin-left: 0;
+  padding: 0px 8px;
+}
+
+dl.emojis dd.success {
+  color: rgb(202, 143, 4);
 }
 </style>
