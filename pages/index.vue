@@ -146,6 +146,19 @@
 import Vue from 'vue'
 import axios from 'axios'
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+function JSONize(str: string) {
+  return (
+    str
+      // wrap keys without quote with valid double quote
+      .replace(/([$\w]+)\s*:/g, function (_, $1: string) {
+        return '"' + $1 + '":'
+      })
+      // replacing single quote wrapped ones to double quote
+      .replace(/'([^']+)'/g, function (_, $1: string) {
+        return '"' + $1 + '"'
+      })
+  )
+}
 export default Vue.extend({
   components: {
     // Logo,
@@ -172,30 +185,18 @@ export default Vue.extend({
       background: '#18191c',
     })
     axios
-      .get('https://cors-anywhere.herokuapp.com/https://tetr.io/js/tetrio.js')
+      .get('https://corsthing.herokuapp.com/https://tetr.io/js/tetrio.js')
       .then((res) => {
         loading.close()
         this.loading = false
         const data = res.data
-        let emotes: any
         const jsonString = (/[a-zA-Z]*=({base:{awesome:.+?}})/.exec(data) || [
           // the array is to stop typescript thinking the exec return could be undefined
           '',
           '',
         ])[1]
-        emotes = {
-          base: {},
-          supporter: {},
-          verified: {},
-          staff: {},
-        }
-        emotes = {
-          base: {},
-          supporter: {},
-          verified: {},
-          staff: {},
-        }
-        eval('emotes = ' + jsonString)
+        const emotes = JSON.parse(JSONize(jsonString))
+
         this.emotes = emotes
       })
   },
