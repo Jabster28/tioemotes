@@ -1,5 +1,7 @@
 # tioemeotes
 
+See all of the emotes on TETR.IO
+
 ## Build Setup
 
 ```bash
