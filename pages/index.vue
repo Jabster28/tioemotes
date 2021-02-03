@@ -20,7 +20,7 @@
       <div v-if="loading" id="target" ref="target" class="center">
         <div ref="content" class="content-div" />
       </div>
-      <div v-else id="emj">
+      <div v-else id="emj" :class="width < 500 ? ['mobile'] : []">
         <dl class="emojis">
           <h3>Base Emotes</h3>
           <div
@@ -166,6 +166,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      width: window.innerWidth,
       emotes: {
         base: {},
         supporter: {},
@@ -176,6 +177,10 @@ export default Vue.extend({
     }
   },
   async mounted() {
+    window.onresize = () => {
+      this.width = window.innerWidth
+    }
+    this.width = window.innerWidth
     this.loading = true
     await sleep(500)
     // @ts-ignore
@@ -233,7 +238,12 @@ export default Vue.extend({
 <style>
 #emj {
   display: flex;
+  flex-direction: row;
   align-items: baseline;
+}
+.mobile {
+  flex-direction: column !important;
+  align-items: center !important;
 }
 .dark .emote {
   background-color: #18191c;

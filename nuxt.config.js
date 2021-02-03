@@ -53,6 +53,7 @@ export default {
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt/content
     '@nuxt/content',
+    '@nuxtjs/device',
   ],
   /*
    ** Axios module configuration
