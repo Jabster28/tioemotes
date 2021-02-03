@@ -236,6 +236,9 @@ export default Vue.extend({
 </script>
 
 <style>
+body {
+  background-color: #18191c;
+}
 #emj {
   display: flex;
   flex-direction: row;
@@ -360,5 +363,8 @@ dl.emojis dd.success {
   flex-direction: column;
   text-align: center;
   font-size: 0.6rem;
+}
+h4 {
+  padding: 20px;
 }
 </style>
